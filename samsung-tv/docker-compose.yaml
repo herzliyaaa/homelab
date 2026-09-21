@@ -13,10 +13,13 @@ services:
     env_file:
       - .env
     environment:
-      - VPN_SERVICE_PROVIDER=protonvpn
+      - VPN_SERVICE_PROVIDER=custom # Matches your Proton VPN .conf exactly
       - VPN_TYPE=wireguard
-      - WIREGUARD_PRIVATE_KEY=${WIREGUARD_PRIVATE_KEY}
-      - WIREGUARD_ADDRESSES=${WIREGUARD_ADDRESSES}
+      - WIREGUARD_ENDPOINT_IP=${WIREGUARD_ENDPOINT_IP}
+      - WIREGUARD_ENDPOINT_PORT=${WIREGUARD_ENDPOINT_PORT}
+      - WIREGUARD_PRIVATE_KEY=${VPN_PRIVATE_KEY}
+      - WIREGUARD_ADDRESSES=${VPN_ADDRESSES}
+      - WIREGUARD_PUBLIC_KEY=${VPN_PUBLIC_KEY}
     ports:
       - 8080:8080 # Exposes qBittorrent securely through the VPN
     restart: unless-stopped

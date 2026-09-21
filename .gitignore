@@ -19,6 +19,10 @@ rustdesk/data/
 # Gluetun - auto-generated VPN server lists
 samsung-tv/gluetun/servers/
 
+# Proton VPN - WireGuard config files (contain keys/endpoints)
+samsung-tv/*.conf
+samsung-tv/*.conf.*
+
 # Jellyfin - runtime config, cache, logs, metadata, plugins
 samsung-tv/jellyfin/cache/
 samsung-tv/jellyfin/config/
