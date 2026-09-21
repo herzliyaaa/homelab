@@ -1,0 +1,31 @@
+# Git
+.DS_Store
+Thumbs.db
+
+# Editor
+.idea/
+.vscode/
+*.swp
+
+# Docker
+.env
+*.env
+.env.*
+!.env.example
+
+# RustDesk - runtime data, private keys, and DB
+rustdesk/data/
+
+# Gluetun - auto-generated VPN server lists
+samsung-tv/gluetun/servers/
+
+# Jellyfin - runtime config, cache, logs, metadata, plugins
+samsung-tv/jellyfin/cache/
+samsung-tv/jellyfin/config/
+samsung-tv/jellyfin/log/
+samsung-tv/jellyfin/metadata/
+samsung-tv/jellyfin/plugins/
+samsung-tv/jellyfin/root/
+
+# qBittorrent - torrents, resume data, config, logs
+samsung-tv/qbittorrent/config/

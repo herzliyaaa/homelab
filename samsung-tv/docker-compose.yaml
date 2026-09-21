@@ -1,0 +1,49 @@
+services:
+
+  gluetun:
+    image: qmcgaw/gluetun:latest
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    volumes:
+      - ./gluetun:/gluetun
+    environment:
+      - VPN_SERVICE_PROVIDER=protonvpn
+      - VPN_TYPE=wireguard
+      # OPEN YOUR DOWNLOADED PROTON .CONF FILE AND PASTE YOUR KEYS HERE:
+      - WIREGUARD_PRIVATE_KEY=
+      - WIREGUARD_ADDRESSES= # e.g., 10.2.0.2/32
+    ports:
+      - 8080:8080 # Exposes qBittorrent securely through the VPN
+    restart: unless-stopped
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    network_mode: "service:gluetun" # Forces all torrent traffic through Proton VPN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - WEBUI_PORT=8080
+      - TEMPORARY_PASSWORD= 
+    volumes:
+      - ./qbittorrent/config:/config
+      - C:\movies:/downloads # Downloads go straight into your Windows C:\movies folder
+    depends_on:
+      - gluetun
+    restart: unless-stopped
+
+  # ---- 100% OPEN-SOURCE MEDIA SERVER ----
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    ports:
+      - 8096:8096 # Exposes Jellyfin to your local network
+    volumes:
+      - ./jellyfin/config:/config
+      - ./jellyfin/cache:/cache
+      - C:\movies:/media/movies # Jellyfin reads directly from your Windows C:\movies folder
+    restart: unless-stopped
