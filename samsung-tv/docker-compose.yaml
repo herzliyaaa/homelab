@@ -34,7 +34,7 @@ services:
       - PGID=1000
       - TZ=Etc/UTC
       - WEBUI_PORT=8080
-      - TEMPORARY_PASSWORD=${QBITTORRENT_PASSWORD} 
+      - TEMPORARY_PASSWORD=${QBITTORRENT_PASSWORD}
     volumes:
       - ./qbittorrent/config:/config
       - C:\movies:/downloads # Downloads go straight into your Windows C:\movies folder
