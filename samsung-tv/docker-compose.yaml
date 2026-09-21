@@ -1,5 +1,6 @@
 services:
 
+  # ---- FREE VPN TUNNEL (Gluetun) ----
   gluetun:
     image: qmcgaw/gluetun:latest
     container_name: gluetun
@@ -9,16 +10,18 @@ services:
       - /dev/net/tun:/dev/net/tun
     volumes:
       - ./gluetun:/gluetun
+    env_file:
+      - .env
     environment:
       - VPN_SERVICE_PROVIDER=protonvpn
       - VPN_TYPE=wireguard
-      # OPEN YOUR DOWNLOADED PROTON .CONF FILE AND PASTE YOUR KEYS HERE:
-      - WIREGUARD_PRIVATE_KEY=
-      - WIREGUARD_ADDRESSES= # e.g., 10.2.0.2/32
+      - WIREGUARD_PRIVATE_KEY=${WIREGUARD_PRIVATE_KEY}
+      - WIREGUARD_ADDRESSES=${WIREGUARD_ADDRESSES}
     ports:
       - 8080:8080 # Exposes qBittorrent securely through the VPN
     restart: unless-stopped
 
+  # ---- SECURE FREE DOWNLOADER ----
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:latest
     container_name: qbittorrent
@@ -28,7 +31,7 @@ services:
       - PGID=1000
       - TZ=Etc/UTC
       - WEBUI_PORT=8080
-      - TEMPORARY_PASSWORD= 
+      - TEMPORARY_PASSWORD=${QBITTORRENT_PASSWORD} 
     volumes:
       - ./qbittorrent/config:/config
       - C:\movies:/downloads # Downloads go straight into your Windows C:\movies folder
@@ -40,8 +43,9 @@ services:
   jellyfin:
     image: jellyfin/jellyfin:latest
     container_name: jellyfin
+    # network_mode: host # Allows your Samsung TV to auto-discover your laptop easily
     ports:
-      - 8096:8096 # Exposes Jellyfin to your local network
+      - 8096:8096 # Backup port exposure for Windows Docker setups
     volumes:
       - ./jellyfin/config:/config
       - ./jellyfin/cache:/cache
